@@ -31,4 +31,12 @@ class FeedController extends Notifier<AsyncValue<List<FeedPost>>> {
       state = AsyncValue.error(e, st);
     }
   }
+
+  bool containsBannedWords(String message, List<String> bannedWords) {
+    final pattern = RegExp(
+      '\\b(${bannedWords.join('|')})\\b',
+      caseSensitive: false,
+    );
+    return pattern.hasMatch(message);
+  }
 }

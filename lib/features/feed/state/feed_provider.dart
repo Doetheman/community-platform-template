@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:white_label_community_app/core/helper/parser_utils.dart';
 import 'package:white_label_community_app/features/feed/data/datasources/feed_remote_data_source.dart';
 import 'package:white_label_community_app/features/feed/data/repositories_impl/feed_repository_impl.dart';
 import 'package:white_label_community_app/features/feed/domain/entities/feed_post.dart';
@@ -26,7 +27,6 @@ final feedRepositoryProvider = Provider<FeedRepository>((ref) {
   return FeedRepositoryImpl(remote);
 });
 
-/// Use cases
 final getFeedProvider = Provider<GetFeed>((ref) {
   final repo = ref.watch(feedRepositoryProvider);
   return GetFeed(repo);
@@ -45,7 +45,12 @@ final deletePostProvider = Provider<DeletePost>((ref) {
 /// Stream of posts (real-time updates)
 final feedStreamProvider = StreamProvider<List<FeedPost>>((ref) {
   final getFeed = ref.watch(getFeedProvider);
-  return getFeed();
+  final bannedWords = ['scam', 'spam', 'hate'];
+  return getFeed().map((posts) {
+    return posts
+        .where((post) => !containsBannedWords(post.content, bannedWords))
+        .toList();
+  });
 });
 
 /// Controller for posting/deleting
