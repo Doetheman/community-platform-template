@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "549681889329",
+    "project_id": "authoryourbrand",
+    "storage_bucket": "authoryourbrand.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:549681889329:android:ab17bf47876e5ac6e75510",
+        "android_client_info": {
+          "package_name": "com.authoryourbrandfiresidesolutions"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQ_e0j7T9_yxfJJY5v8pPt3qnEboGXHz4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:549681889329:android:70a70795f7eb2185e75510",
+        "android_client_info": {
+          "package_name": "com.example.white_label_community_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQ_e0j7T9_yxfJJY5v8pPt3qnEboGXHz4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:549681889329:android:3cd00da33c17c0dbe75510",
+        "android_client_info": {
+          "package_name": "com.firesidesolution.authoryourbrand"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQ_e0j7T9_yxfJJY5v8pPt3qnEboGXHz4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
