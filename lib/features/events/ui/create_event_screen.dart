@@ -19,6 +19,9 @@ class CreateEventScreen extends ConsumerWidget {
           onSubmit: (Event event) async {
             await controller.addEvent(event);
             if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Event created successfully')),
+              );
               Navigator.pop(context);
             }
           },

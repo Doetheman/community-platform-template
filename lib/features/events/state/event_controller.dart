@@ -35,4 +35,9 @@ class EventController extends AsyncNotifier<List<Event>> {
     await _deleteEvent(eventId);
     await refreshEvents();
   }
+
+  Future<void> updateEvent(Event event) async {
+    await ref.read(eventRepositoryProvider).updateEvent(event);
+    await refreshEvents();
+  }
 }

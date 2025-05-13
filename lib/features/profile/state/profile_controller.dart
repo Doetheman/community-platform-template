@@ -23,7 +23,7 @@ class ProfileController extends AsyncNotifier<UserProfile?> {
     final uid = auth.currentUser?.uid;
     if (uid == null) return null;
 
-     // Try to get existing profile
+    // Try to get existing profile
     final profile = await _getProfile(uid);
 
     // If no profile exists, create one

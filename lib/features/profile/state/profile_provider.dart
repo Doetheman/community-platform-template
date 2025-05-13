@@ -52,3 +52,10 @@ final profileControllerProvider =
     AsyncNotifierProvider<ProfileController, UserProfile?>(
       ProfileController.new,
     );
+
+final userProfileByUidProvider = FutureProvider.family<UserProfile?, String>((
+  ref,
+  uid,
+) async {
+  return ref.read(getProfileProvider)(uid);
+});

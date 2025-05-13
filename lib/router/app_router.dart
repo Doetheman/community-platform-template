@@ -5,12 +5,16 @@ import 'package:go_router/go_router.dart';
 import 'package:white_label_community_app/core/helper/go_router_refresh_notifier.dart';
 import 'package:white_label_community_app/features/auth/state/auth_provider.dart';
 import 'package:white_label_community_app/features/auth/ui/auth_screen.dart';
+import 'package:white_label_community_app/features/events/domain/entities/event.dart';
+import 'package:white_label_community_app/features/events/ui/edit_event_screen.dart';
+import 'package:white_label_community_app/features/events/ui/event_detail_screen.dart';
 import 'package:white_label_community_app/features/feed/ui/create_post_screen.dart';
 import 'package:white_label_community_app/features/feed/ui/feed_screen.dart';
 import 'package:white_label_community_app/features/events/ui/event_list_screen.dart';
 import 'package:white_label_community_app/features/events/ui/create_event_screen.dart';
 import 'package:white_label_community_app/features/profile/ui/edit_profile_screen.dart';
 import 'package:white_label_community_app/features/profile/ui/profile_screen.dart';
+import 'package:white_label_community_app/features/profile/ui/view_profile_screen.dart';
 import 'package:white_label_community_app/router/bottom_nav_shell.dart';
 import 'package:white_label_community_app/router/ui/settings_screen.dart';
 
@@ -45,6 +49,7 @@ final appRouter = Provider<GoRouter>((ref) {
 
       if (!isAuth && !isOnAuth) return '/auth';
       if (isAuth && isOnAuth) return '/';
+      return null;
     },
     routes: [
       ShellRoute(
@@ -80,6 +85,28 @@ final appRouter = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/edit-profile',
         builder: (context, state) => const EditProfileScreen(),
+      ),
+      GoRoute(
+        path: '/edit-event/:eventId',
+        builder: (context, state) {
+          final event = state.extra as Event;
+          return EditEventScreen(event: event);
+        },
+      ),
+      GoRoute(
+        path: '/event/:eventId',
+        builder: (context, state) {
+          final event = state.extra as Event;
+
+          return EventDetailScreen(event: event);
+        },
+      ),
+      GoRoute(
+        path: '/profile/:uid',
+        builder: (context, state) {
+          final uid = state.extra as String;
+          return ViewProfileScreen(uid: uid);
+        },
       ),
     ],
   );

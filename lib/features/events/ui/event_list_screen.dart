@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:white_label_community_app/features/auth/state/auth_provider.dart'
+    as auth;
+import 'package:white_label_community_app/features/auth/state/user_role_provider.dart';
 import 'package:white_label_community_app/features/events/domain/entities/event.dart';
 import '../state/event_provider.dart';
 import 'widgets/event_card.dart';
@@ -15,6 +18,9 @@ class EventListScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final eventState = ref.watch(eventControllerProvider);
+    final currentUser = ref.watch(auth.firebaseAuthProvider).currentUser;
+    final eventController = ref.read(eventControllerProvider.notifier);
+    final userRole = ref.watch(userRoleProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -53,7 +59,31 @@ class EventListScreen extends ConsumerWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: events.length,
                     itemBuilder: (context, index) {
-                      return EventCard(event: events[index]);
+                      final event = events[index];
+                      final isHost = currentUser?.uid == event.hostId;
+                      final canEdit = isHost || userRole.value == 'admin';
+
+                      return GestureDetector(
+                        onTap:
+                            () => context.push(
+                              '/event/${event.id}',
+                              extra: event,
+                            ),
+                        child: EventCard(
+                          event: event,
+                          onEdit:
+                              canEdit
+                                  ? () => context.push(
+                                    '/edit-event/${event.id}',
+                                    extra: event,
+                                  )
+                                  : null,
+                          onDelete:
+                              canEdit
+                                  ? () => eventController.removeEvent(event.id)
+                                  : null,
+                        ),
+                      );
                     },
                   ),
                 ),
