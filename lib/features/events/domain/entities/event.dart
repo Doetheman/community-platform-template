@@ -7,6 +7,11 @@ class Event {
   final bool isPaid;
   final double? price;
   final String hostId;
+  final int capacity;
+  final String? imageUrl;
+  final List<String>? galleryImageUrls;
+  final String? category;
+  final Map<String, dynamic>? additionalInfo;
 
   Event({
     required this.id,
@@ -17,6 +22,11 @@ class Event {
     required this.isPaid,
     this.price,
     required this.hostId,
+    required this.capacity,
+    this.imageUrl,
+    this.galleryImageUrls,
+    this.category,
+    this.additionalInfo,
   });
 
   Event copyWith({
@@ -28,6 +38,11 @@ class Event {
     bool? isPaid,
     double? price,
     String? hostId,
+    int? capacity,
+    String? imageUrl,
+    List<String>? galleryImageUrls,
+    String? category,
+    Map<String, dynamic>? additionalInfo,
   }) {
     return Event(
       id: id ?? this.id,
@@ -38,6 +53,11 @@ class Event {
       isPaid: isPaid ?? this.isPaid,
       price: price ?? this.price,
       hostId: hostId ?? this.hostId,
+      capacity: capacity ?? this.capacity,
+      imageUrl: imageUrl ?? this.imageUrl,
+      galleryImageUrls: galleryImageUrls ?? this.galleryImageUrls,
+      category: category ?? this.category,
+      additionalInfo: additionalInfo ?? this.additionalInfo,
     );
   }
 }

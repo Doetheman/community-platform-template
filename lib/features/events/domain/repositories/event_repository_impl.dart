@@ -56,4 +56,10 @@ class EventRepositoryImpl implements EventRepository {
   Future<void> updateRSVP(String eventId, RSVPModel model) async {
     await remoteDataSource.updateRSVP(eventId, model);
   }
+
+  @override
+  Future<Event> getEventById(String eventId) async {
+    final model = await remoteDataSource.getEventById(eventId);
+    return model.toEntity();
+  }
 }

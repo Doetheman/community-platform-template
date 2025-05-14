@@ -33,6 +33,7 @@ class ProfileController extends AsyncNotifier<UserProfile?> {
         uid: user.uid,
         name: user.email?.split('@')[0] ?? 'User',
         interests: [],
+        socialLinks: const {},
       );
       await _createProfile(newProfile);
       return newProfile;

@@ -4,13 +4,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class BrandThemeConfig {
   final String name;
   final Color primaryColor;
-  final String logoUrl;
+  final String? logoUrl;
+  final String? logoAsset;
   final String? fontFamily;
 
   const BrandThemeConfig({
     required this.name,
     required this.primaryColor,
-    required this.logoUrl,
+    this.logoUrl,
+    this.logoAsset,
     this.fontFamily,
   });
 }
@@ -20,7 +22,7 @@ final brandThemeProvider = Provider<BrandThemeConfig>((ref) {
   return const BrandThemeConfig(
     name: "Clockout",
     primaryColor: Color(0xFF6C63FF),
-    logoUrl: "https://via.placeholder.com/100x100.png?text=Clockout",
+    logoAsset: "assets/images/logo.png",
     fontFamily: 'Inter',
   );
 });

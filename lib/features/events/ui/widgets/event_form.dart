@@ -83,6 +83,7 @@ class EventForm extends ConsumerWidget {
                 dateTime: form.date!,
                 price: price,
                 hostId: currentUser?.uid ?? '',
+                capacity: 20,
               );
 
               onSubmit(event);

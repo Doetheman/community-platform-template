@@ -47,7 +47,7 @@ abstract mixin class $RSVPModelCopyWith<$Res>  {
   factory $RSVPModelCopyWith(RSVPModel value, $Res Function(RSVPModel) _then) = _$RSVPModelCopyWithImpl;
 @useResult
 $Res call({
- String uid, String response, DateTime timestamp, bool paid
+ String uid, String response,@TimestampConverter() DateTime timestamp, bool paid
 });
 
 

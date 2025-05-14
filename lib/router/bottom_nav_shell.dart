@@ -8,6 +8,8 @@ class BottomNavShell extends ConsumerWidget {
 
   const BottomNavShell({super.key, required this.child});
 
+  static const _tabs = ['/', '/feed', '/messages', '/profile'];
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final brand = ref.watch(brandThemeProvider);
@@ -28,12 +30,16 @@ class BottomNavShell extends ConsumerWidget {
             case 2:
               context.go('/profile');
               break;
+            case 3:
+              context.go('/messages');
+              break;
           }
         },
         destinations: const [
           NavigationDestination(icon: Icon(Icons.event), label: 'Events'),
           NavigationDestination(icon: Icon(Icons.feed), label: 'Feed'),
           NavigationDestination(icon: Icon(Icons.person), label: 'Profile'),
+          NavigationDestination(icon: Icon(Icons.message), label: 'Messages'),
         ],
       ),
     );

@@ -63,26 +63,24 @@ class EventListScreen extends ConsumerWidget {
                       final isHost = currentUser?.uid == event.hostId;
                       final canEdit = isHost || userRole.value == 'admin';
 
-                      return GestureDetector(
+                      return EventCard(
+                        event: event,
                         onTap:
                             () => context.push(
                               '/event/${event.id}',
                               extra: event,
                             ),
-                        child: EventCard(
-                          event: event,
-                          onEdit:
-                              canEdit
-                                  ? () => context.push(
-                                    '/edit-event/${event.id}',
-                                    extra: event,
-                                  )
-                                  : null,
-                          onDelete:
-                              canEdit
-                                  ? () => eventController.removeEvent(event.id)
-                                  : null,
-                        ),
+                        onEdit:
+                            canEdit
+                                ? () => context.push(
+                                  '/edit-event/${event.id}',
+                                  extra: event,
+                                )
+                                : null,
+                        onDelete:
+                            canEdit
+                                ? () => eventController.removeEvent(event.id)
+                                : null,
                       );
                     },
                   ),

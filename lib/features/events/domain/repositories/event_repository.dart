@@ -12,4 +12,5 @@ abstract class EventRepository {
   Future<List<RSVPModel>> getRSVPs(String eventId);
   Future<RSVPModel?> getUserRSVP(String eventId, String uid);
   Future<void> updateRSVP(String eventId, RSVPModel model);
+  Future<Event> getEventById(String eventId);
 }

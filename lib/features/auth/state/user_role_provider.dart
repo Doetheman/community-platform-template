@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:white_label_community_app/features/auth/state/auth_provider.dart';
 
 final userRoleProvider = FutureProvider<String>((ref) async {

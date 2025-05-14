@@ -50,5 +50,20 @@
         "*.local"
       ]
     }
-  ]
+  ],
+  "hosting": {
+    "site": "fireside-solutions",
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
 }

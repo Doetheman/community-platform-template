@@ -8,15 +8,21 @@ import 'package:white_label_community_app/features/auth/ui/auth_screen.dart';
 import 'package:white_label_community_app/features/events/domain/entities/event.dart';
 import 'package:white_label_community_app/features/events/ui/edit_event_screen.dart';
 import 'package:white_label_community_app/features/events/ui/event_detail_screen.dart';
+import 'package:white_label_community_app/features/events/ui/events_screen.dart';
+import 'package:white_label_community_app/features/events/ui/payment_result_screen.dart';
 import 'package:white_label_community_app/features/feed/ui/create_post_screen.dart';
 import 'package:white_label_community_app/features/feed/ui/feed_screen.dart';
-import 'package:white_label_community_app/features/events/ui/event_list_screen.dart';
 import 'package:white_label_community_app/features/events/ui/create_event_screen.dart';
+import 'package:white_label_community_app/features/media/ui/screens/album_detail_screen.dart';
+import 'package:white_label_community_app/features/media/ui/screens/albums_screen.dart';
+import 'package:white_label_community_app/features/media/ui/screens/media_detail_screen.dart';
+import 'package:white_label_community_app/features/media/ui/screens/media_gallery_screen.dart';
 import 'package:white_label_community_app/features/profile/ui/edit_profile_screen.dart';
 import 'package:white_label_community_app/features/profile/ui/profile_screen.dart';
 import 'package:white_label_community_app/features/profile/ui/view_profile_screen.dart';
 import 'package:white_label_community_app/router/bottom_nav_shell.dart';
 import 'package:white_label_community_app/router/ui/settings_screen.dart';
+import 'package:white_label_community_app/features/community/ui/screens/messages_screen.dart';
 
 class GoRouterRefreshStream extends ChangeNotifier {
   GoRouterRefreshStream(Stream<dynamic> stream) {
@@ -55,13 +61,14 @@ final appRouter = Provider<GoRouter>((ref) {
       ShellRoute(
         builder: (context, state, child) => BottomNavShell(child: child),
         routes: [
-          GoRoute(
-            path: '/',
-            builder: (context, state) => const EventListScreen(),
-          ),
+          GoRoute(path: '/', builder: (context, state) => const EventsScreen()),
           GoRoute(
             path: '/feed',
             builder: (context, state) => const FeedScreen(),
+          ),
+          GoRoute(
+            path: '/messages',
+            builder: (context, state) => const MessagesScreen(),
           ),
           GoRoute(
             path: '/profile',
@@ -106,6 +113,57 @@ final appRouter = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final uid = state.extra as String;
           return ViewProfileScreen(uid: uid);
+        },
+      ),
+      GoRoute(
+        path: '/payment-result',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          final eventId = extra['eventId'] as String;
+          final isSuccess = extra['isSuccess'] as bool;
+          final sessionId = extra['sessionId'] as String?;
+
+          return PaymentResultScreen(
+            eventId: eventId,
+            isSuccess: isSuccess,
+            sessionId: sessionId,
+          );
+        },
+      ),
+      // Media Routes
+      GoRoute(
+        path: '/media-gallery/:userId',
+        builder: (context, state) {
+          final userId = state.pathParameters['userId'] ?? '';
+          final isCurrentUser =
+              state.uri.queryParameters['isCurrentUser'] == 'true';
+          return MediaGalleryScreen(
+            userId: userId,
+            isCurrentUser: isCurrentUser,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/media/:mediaId',
+        builder: (context, state) {
+          final mediaId = state.pathParameters['mediaId'] ?? '';
+          return MediaDetailScreen(mediaId: mediaId);
+        },
+      ),
+      GoRoute(
+        path: '/albums/:userId',
+        builder: (context, state) {
+          final userId = state.pathParameters['userId'] ?? '';
+          final isCurrentUser =
+              state.uri.queryParameters['isCurrentUser'] == 'true';
+          return AlbumsScreen(userId: userId, isCurrentUser: isCurrentUser);
+        },
+      ),
+      GoRoute(
+        path: '/albums/detail/:albumId',
+        builder: (context, state) {
+          final albumId = state.pathParameters['albumId'] ?? '';
+          return AlbumDetailScreen(albumId: albumId);
         },
       ),
     ],

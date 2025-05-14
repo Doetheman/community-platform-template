@@ -3,6 +3,14 @@
     "default": "authoryourbrand",
     "staging": "authoryourbrand"
   },
-  "targets": {},
+  "targets": {
+    "authoryourbrand": {
+      "hosting": {
+        "firesideApp": [
+          "app-fireside-solutions"
+        ]
+      }
+    }
+  },
   "etags": {}
 }

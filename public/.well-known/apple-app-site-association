@@ -1,0 +1,16 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "3FPD7Q6LPW.com.example.whiteLabelCommunityApp",
+        "paths": [
+          "/payment-success",
+          "/payment-success/*",
+          "/payment-cancel",
+          "/payment-cancel/*"
+        ]
+      }
+    ]
+  }
+}

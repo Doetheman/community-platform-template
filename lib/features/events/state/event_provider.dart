@@ -27,6 +27,12 @@ final eventRepositoryProvider = Provider<EventRepository>((ref) {
   return EventRepositoryImpl(remote);
 });
 
+final eventByIdProvider = FutureProvider.family<Event, String>((ref, eventId) async {
+  final repository = ref.watch(eventRepositoryProvider);
+  return repository.getEventById(eventId);
+});
+
+
 // Use Cases
 final getEventsProvider = Provider<GetEvents>((ref) {
   final repo = ref.watch(eventRepositoryProvider);

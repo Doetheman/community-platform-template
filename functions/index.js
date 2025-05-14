@@ -9,8 +9,7 @@ const bodyParser = require("body-parser");
 const { FieldValue } = require("firebase-admin/firestore");
 
 admin.initializeApp();
-let successUrl;
-let cancelUrl;
+let deepLinkDomain;
 let stripeSecret;
 let stripeWebhookSecret;
 const isProd = process.env.NODE_ENV === "production";
@@ -20,8 +19,7 @@ if (isProd) {
 } else {
   console.log("Development environment detected");
   stripeSecret = process.env.STRIPE_SECRET_KEY;
-  successUrl = process.env.SUCCESS_URL || "https://default-url.com";
-  cancelUrl = process.env.CANCEL_URL || "https://default-url.com";
+  deepLinkDomain = process.env.DEEP_LINK_DOMAIN;
   stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 }
 const stripe = require("stripe")(stripeSecret);
@@ -100,7 +98,6 @@ exports.createCheckoutSession = functions.https.onCall(
       );
     }
 
-    console.log("cents??:", amount);
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
@@ -116,8 +113,8 @@ exports.createCheckoutSession = functions.https.onCall(
         },
       ],
       mode: "payment",
-      success_url: successUrl,
-      cancel_url: cancelUrl,
+      success_url: `https://${deepLinkDomain}/payment-success`,
+      cancel_url: `https://${deepLinkDomain}/payment-cancel`,
       metadata: { eventId, amount, eventTitle, uid },
     });
 

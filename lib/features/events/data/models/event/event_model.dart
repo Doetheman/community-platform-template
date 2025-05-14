@@ -16,10 +16,15 @@ class EventModel with _$EventModel {
     required this.isPaid,
     this.price,
     required this.hostId,
+    required this.capacity,
+    this.imageUrl,
+    this.galleryImageUrls,
+    this.category,
+    this.additionalInfo,
   });
 
   @override
-  final String? id;
+  final String? id; // Document ID (not stored in Firestore)
   @override
   final String? title;
   @override
@@ -34,11 +39,25 @@ class EventModel with _$EventModel {
   final double? price;
   @override
   final String? hostId;
+  @override
+  final int? capacity;
+  @override
+  final String? imageUrl;
+  @override
+  final List<String>? galleryImageUrls;
+  @override
+  final String? category;
+  @override
+  final Map<String, dynamic>? additionalInfo;
 
   factory EventModel.fromJson(Map<String, dynamic> json) =>
       _$EventModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$EventModelToJson(this);
+  Map<String, dynamic> toJson() {
+    final json = _$EventModelToJson(this);
+    json.remove('id'); // Remove id from json as it's the document ID
+    return json;
+  }
 
   Event toEntity() => Event(
     id: id ?? '',
@@ -49,6 +68,11 @@ class EventModel with _$EventModel {
     isPaid: isPaid ?? false,
     price: price,
     hostId: hostId ?? '',
+    capacity: capacity ?? 0,
+    imageUrl: imageUrl,
+    galleryImageUrls: galleryImageUrls,
+    category: category,
+    additionalInfo: additionalInfo,
   );
 
   factory EventModel.fromEntity(Event event) => EventModel(
@@ -60,5 +84,10 @@ class EventModel with _$EventModel {
     isPaid: event.isPaid,
     price: event.price,
     hostId: event.hostId,
+    capacity: event.capacity,
+    imageUrl: event.imageUrl,
+    galleryImageUrls: event.galleryImageUrls,
+    category: event.category,
+    additionalInfo: event.additionalInfo,
   );
 }
