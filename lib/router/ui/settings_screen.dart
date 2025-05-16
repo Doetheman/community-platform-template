@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
+import 'package:white_label_community_app/features/community/ui/screens/chat_screen.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -90,6 +91,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     }
   }
 
+  void _contactAdmin() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder:
+            (context) => const ChatScreen(title: 'Creator/Admin', chatId: ''),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -126,6 +137,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               icon: const Icon(Icons.delete_forever),
               label: const Text('Delete Account'),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            ),
+            const SizedBox(height: 24),
+            // Contact Admin button
+            ElevatedButton.icon(
+              onPressed: _contactAdmin,
+              icon: const Icon(Icons.support_agent),
+              label: const Text('Contact Admin'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.amber,
+                foregroundColor: Colors.black,
+                textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+              ),
             ),
           ],
         ),

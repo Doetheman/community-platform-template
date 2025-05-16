@@ -22,4 +22,9 @@ class ProfileRemoteDataSource {
         .doc(model.uid)
         .update(model.toJson());
   }
+
+  Future<List<ProfileModel>> getAllProfiles() async {
+    final query = await firestore.collection('profiles').get();
+    return query.docs.map((doc) => ProfileModel.fromJson(doc.data())).toList();
+  }
 }

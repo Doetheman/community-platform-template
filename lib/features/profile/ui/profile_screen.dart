@@ -267,56 +267,6 @@ class ProfileScreen extends ConsumerWidget {
                 }, childCount: visibleCategories.length),
               ),
 
-              // Account settings section
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Card(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Row(
-                            children: [
-                              const Icon(Icons.settings),
-                              const SizedBox(width: 16),
-                              Text(
-                                'Account Settings',
-                                style: Theme.of(context).textTheme.titleMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Divider(height: 1),
-                        ListTile(
-                          leading: const Icon(Icons.notifications),
-                          title: const Text('Notifications'),
-                          trailing: const Icon(Icons.chevron_right),
-                          onTap: () => context.push('/settings/notifications'),
-                        ),
-                        const Divider(height: 1),
-                        ListTile(
-                          leading: const Icon(Icons.security),
-                          title: const Text('Privacy'),
-                          trailing: const Icon(Icons.chevron_right),
-                          onTap: () => context.push('/settings/privacy'),
-                        ),
-                        const Divider(height: 1),
-                        ListTile(
-                          leading: const Icon(Icons.help),
-                          title: const Text('Help & Support'),
-                          trailing: const Icon(Icons.chevron_right),
-                          onTap: () => context.push('/settings/help'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-
-              // Add some bottom padding
               const SliverToBoxAdapter(child: SizedBox(height: 32)),
             ],
           );

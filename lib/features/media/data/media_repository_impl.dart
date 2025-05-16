@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import 'package:white_label_community_app/features/media/data/media_remote_data_source.dart';
 import 'package:white_label_community_app/features/media/data/models/media_model.dart';
@@ -11,7 +10,6 @@ import 'package:white_label_community_app/features/media/domain/entities/media_i
     hide MediaAlbum;
 import 'package:white_label_community_app/features/media/domain/repositories/media_repository.dart';
 import 'package:white_label_community_app/features/profile/domain/entities/user_profile.dart';
-import 'package:white_label_community_app/features/profile/state/profile_provider.dart';
 
 // Extension methods to add functionality to MediaRemoteDataSource
 extension MediaRemoteDataSourceExtension on MediaRemoteDataSource {

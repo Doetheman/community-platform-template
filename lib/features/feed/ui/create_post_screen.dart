@@ -56,11 +56,66 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
 
     try {
       if (mediaType == 'image') {
-        await _showImageSourcePicker();
+        await showModalBottomSheet(
+          context: context,
+          builder:
+              (context) => SafeArea(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.photo_library),
+                      title: const Text('Choose from gallery'),
+                      onTap: () {
+                        Navigator.pop(context);
+                        _pickImageFromGallery();
+                      },
+                    ),
+                    if (MediaQuery.of(context).size.width <
+                        600) // Only show on mobile
+                      ListTile(
+                        leading: const Icon(Icons.camera_alt),
+                        title: const Text('Take a photo'),
+                        onTap: () {
+                          Navigator.pop(context);
+                          _takeNewPhoto();
+                        },
+                      ),
+                  ],
+                ),
+              ),
+        );
       } else if (mediaType == 'video') {
-        await _showVideoSourcePicker();
+        await showModalBottomSheet(
+          context: context,
+          builder:
+              (context) => SafeArea(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.photo_library),
+                      title: const Text('Choose from gallery'),
+                      onTap: () {
+                        Navigator.pop(context);
+                        _pickVideoFromGallery();
+                      },
+                    ),
+                    if (MediaQuery.of(context).size.width <
+                        600) // Only show on mobile
+                      ListTile(
+                        leading: const Icon(Icons.videocam),
+                        title: const Text('Record video'),
+                        onTap: () {
+                          Navigator.pop(context);
+                          _recordNewVideo();
+                        },
+                      ),
+                  ],
+                ),
+              ),
+        );
       } else if (mediaType == 'audio') {
-        // Audio functionality for admins
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Audio recording coming soon')),
         );
@@ -70,36 +125,6 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
         setState(() => _processingMedia = false);
       }
     }
-  }
-
-  Future<void> _showImageSourcePicker() async {
-    await showModalBottomSheet(
-      context: context,
-      builder:
-          (context) => Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('Choose from gallery'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _pickImageFromGallery();
-                },
-              ),
-              if (MediaQuery.of(context).size.width <
-                  600) // Only show on mobile
-                ListTile(
-                  leading: const Icon(Icons.camera_alt),
-                  title: const Text('Take a photo'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _takeNewPhoto();
-                  },
-                ),
-            ],
-          ),
-    );
   }
 
   Future<void> _pickImageFromGallery() async {
@@ -131,41 +156,11 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
     }
   }
 
-  Future<void> _showVideoSourcePicker() async {
-    await showModalBottomSheet(
-      context: context,
-      builder:
-          (context) => Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('Choose from gallery'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _pickVideoFromGallery();
-                },
-              ),
-              if (MediaQuery.of(context).size.width <
-                  600) // Only show on mobile
-                ListTile(
-                  leading: const Icon(Icons.videocam),
-                  title: const Text('Record video'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _recordNewVideo();
-                  },
-                ),
-            ],
-          ),
-    );
-  }
-
   Future<void> _pickVideoFromGallery() async {
     final picker = ImagePicker();
     final picked = await picker.pickVideo(
       source: ImageSource.gallery,
-      maxDuration: const Duration(minutes: 10), // Increased to 10 minutes
+      maxDuration: const Duration(minutes: 5), // Limited to 5 minutes
     );
 
     _processPickedVideo(picked);
@@ -175,7 +170,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
     final picker = ImagePicker();
     final picked = await picker.pickVideo(
       source: ImageSource.camera,
-      maxDuration: const Duration(minutes: 10),
+      maxDuration: const Duration(minutes: 5), // Limited to 5 minutes
     );
 
     _processPickedVideo(picked);
@@ -236,8 +231,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
     setState(() => _isLoading = true);
 
     try {
-      final userId =
-          FirebaseAuth.instance.currentUser?.uid ?? const Uuid().v4();
+      final userId = FirebaseAuth.instance.currentUser!.uid;
       String? mediaUrl;
 
       if (_mediaFile != null) {
@@ -408,102 +402,245 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
         const SizedBox(height: 8),
         ClipRRect(
           borderRadius: BorderRadius.circular(12),
-          child:
-              widget.mediaType == 'image'
-                  ? Image.file(_mediaFile!)
-                  : widget.mediaType == 'video' &&
-                      _videoController != null &&
-                      _videoController!.value.isInitialized
-                  ? AspectRatio(
-                    aspectRatio: _videoController!.value.aspectRatio,
-                    child: Stack(
-                      alignment: Alignment.center,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              if (_processingMedia)
+                Container(
+                  width: double.infinity,
+                  height: 300,
+                  color: Colors.grey[200],
+                  child: const Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        VideoPlayer(_videoController!),
+                        CircularProgressIndicator(),
+                        SizedBox(height: 16),
+                        Text('Processing media...'),
+                      ],
+                    ),
+                  ),
+                )
+              else if (widget.mediaType == 'image')
+                GestureDetector(
+                  onTap: () => _showFullScreenImage(context),
+                  child: Hero(
+                    tag: 'image_preview',
+                    child: Image.file(
+                      _mediaFile!,
+                      width: double.infinity,
+                      height: 300,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                )
+              else if (widget.mediaType == 'video' && _videoController != null)
+                AspectRatio(
+                  aspectRatio: _videoController!.value.aspectRatio,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      VideoPlayer(_videoController!),
+                      if (!_videoController!.value.isPlaying)
                         IconButton(
-                          icon: Icon(
-                            _videoController!.value.isPlaying
-                                ? Icons.pause
-                                : Icons.play_arrow,
+                          icon: const Icon(
+                            Icons.play_arrow,
                             size: 50,
-                            color: Colors.white.withOpacity(0.8),
+                            color: Colors.white,
                           ),
                           onPressed: () {
                             setState(() {
-                              _videoController!.value.isPlaying
-                                  ? _videoController!.pause()
-                                  : _videoController!.play();
+                              _videoController!.play();
                             });
                           },
                         ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        ),
+        if (widget.mediaType == 'video' && _videoController != null) ...[
+          const SizedBox(height: 8),
+          ValueListenableBuilder(
+            valueListenable: _videoController!,
+            builder: (context, VideoPlayerValue value, child) {
+              return Column(
+                children: [
+                  Slider(
+                    value: value.position.inMilliseconds.toDouble(),
+                    min: 0,
+                    max: value.duration.inMilliseconds.toDouble(),
+                    onChanged: (newValue) {
+                      _videoController!.seekTo(
+                        Duration(milliseconds: newValue.toInt()),
+                      );
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          _formatDuration(value.position),
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        Text(
+                          _formatDuration(value.duration),
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
                       ],
                     ),
-                  )
-                  : Container(
-                    height: 200,
-                    color: Colors.grey[200],
-                    child: const Center(child: Text('Preview not available')),
                   ),
-        ),
+                ],
+              );
+            },
+          ),
+        ],
         const SizedBox(height: 12),
-        OutlinedButton.icon(
-          onPressed: () => _pickMedia(widget.mediaType),
-          icon: const Icon(Icons.refresh),
-          label: const Text('Change Media'),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            OutlinedButton.icon(
+              onPressed: () => _showMediaTypePicker(),
+              icon: const Icon(Icons.refresh),
+              label: const Text('Change Media'),
+            ),
+            const SizedBox(width: 8),
+            OutlinedButton.icon(
+              onPressed: () {
+                setState(() {
+                  _mediaFile = null;
+                  _videoController?.dispose();
+                  _videoController = null;
+                });
+              },
+              icon: const Icon(Icons.delete_outline),
+              label: const Text('Remove'),
+            ),
+          ],
         ),
       ],
     );
   }
 
+  String _formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    return '$minutes:$seconds';
+  }
+
+  void _showFullScreenImage(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder:
+            (context) => Scaffold(
+              backgroundColor: Colors.black,
+              appBar: AppBar(
+                backgroundColor: Colors.black,
+                iconTheme: const IconThemeData(color: Colors.white),
+              ),
+              body: Center(
+                child: InteractiveViewer(
+                  minScale: 0.5,
+                  maxScale: 4.0,
+                  child: Hero(
+                    tag: 'image_preview',
+                    child: Image.file(_mediaFile!, fit: BoxFit.contain),
+                  ),
+                ),
+              ),
+            ),
+      ),
+    );
+  }
+
   Widget _buildMediaPicker() {
-    IconData icon;
-    String label;
-    String description = '';
+    return InkWell(
+      onTap: () => _showMediaTypePicker(),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey.shade300),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.add_photo_alternate, size: 48, color: Colors.grey[400]),
+            const SizedBox(height: 12),
+            Text(
+              'Add photos or videos to your post',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey[600]),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton.icon(
+              onPressed: () => _showMediaTypePicker(),
+              icon: const Icon(Icons.add_photo_alternate),
+              label: const Text('Add Media'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-    switch (widget.mediaType) {
-      case 'image':
-        icon = Icons.image;
-        label = 'Add Image';
-        description = 'Select a photo from your gallery';
-        break;
-      case 'video':
-        icon = Icons.videocam;
-        label = 'Upload Video';
-        description = 'Select a video (up to 10 min) from your gallery';
-        break;
-      case 'audio':
-        icon = Icons.mic;
-        label = 'Record Audio';
-        description = 'Admin only: Record audio for your post';
-        break;
-      default:
-        icon = Icons.add_photo_alternate;
-        label = 'Add Media';
-        description = 'Add photos or videos to your post';
-    }
-
-    return Center(
-      child: Column(
-        children: [
-          const SizedBox(height: 20),
-          Icon(icon, size: 80, color: Colors.grey[400]),
-          const SizedBox(height: 12),
-          Text(
-            description,
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.grey[600]),
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton.icon(
-            onPressed: () => _pickMedia(widget.mediaType),
-            icon: Icon(icon),
-            label: Text(label),
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+  Future<void> _showMediaTypePicker() async {
+    await showModalBottomSheet(
+      context: context,
+      builder:
+          (context) => SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.image),
+                  title: const Text('Add Photo'),
+                  subtitle: const Text(
+                    'Choose from gallery or take a new photo',
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _pickMedia('image');
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.videocam),
+                  title: const Text('Add Video'),
+                  subtitle: const Text(
+                    'Choose from gallery or record a new video (up to 5 min)',
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _pickMedia('video');
+                  },
+                ),
+                if (widget.mediaType == 'audio') // Only show for admin
+                  ListTile(
+                    leading: const Icon(Icons.mic),
+                    title: const Text('Record Audio'),
+                    subtitle: const Text('Coming soon'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Audio recording coming soon'),
+                        ),
+                      );
+                    },
+                  ),
+              ],
             ),
           ),
-        ],
-      ),
     );
   }
 }

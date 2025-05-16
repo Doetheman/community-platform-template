@@ -25,4 +25,10 @@ class ProfileRepositoryImpl implements ProfileRepository {
     final model = ProfileModel.fromEntity(profile);
     await remoteDataSource.updateProfile(model);
   }
+
+  @override
+  Future<List<UserProfile>> getAllProfiles() async {
+    final models = await remoteDataSource.getAllProfiles();
+    return models.map((m) => m.toEntity()).toList();
+  }
 }

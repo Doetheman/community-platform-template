@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:white_label_community_app/features/auth/state/user_role_provider.dart';
-import 'package:white_label_community_app/features/profile/config/profile_config.dart';
-import 'package:white_label_community_app/features/profile/domain/entities/user_profile.dart';
 import 'package:white_label_community_app/features/profile/services/profile_config_service.dart';
 import 'package:white_label_community_app/features/profile/state/profile_provider.dart';
 import 'package:white_label_community_app/features/profile/ui/widgets/profile_header.dart';

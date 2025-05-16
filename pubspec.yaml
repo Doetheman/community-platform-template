@@ -58,6 +58,9 @@ dependencies:
   flutter_dotenv: ^5.2.1
   video_player: ^2.9.5
   table_calendar: ^3.2.0
+  timeago: ^3.6.1
+  share_plus: ^11.0.0
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:

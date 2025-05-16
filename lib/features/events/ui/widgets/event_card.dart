@@ -406,65 +406,6 @@ class EventCard extends StatelessWidget {
     }
   }
 
-  Widget _buildStatusChip(
-    BuildContext context,
-    bool isToday,
-    bool isUpcoming,
-    bool isPast,
-  ) {
-    final theme = Theme.of(context);
-
-    if (isPast) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        decoration: BoxDecoration(
-          color: Colors.grey.shade200,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Text(
-          'Past',
-          style: TextStyle(
-            color: Colors.grey.shade700,
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    } else if (isToday) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.primaryContainer,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Text(
-          'Today',
-          style: TextStyle(
-            color: theme.colorScheme.onPrimaryContainer,
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    } else {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        decoration: BoxDecoration(
-          color: Colors.green.shade100,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Text(
-          'Upcoming',
-          style: TextStyle(
-            color: Colors.green.shade800,
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    }
-  }
-
   Future<void> _showDeleteConfirmation(BuildContext context) async {
     final confirmed = await showDialog<bool>(
       context: context,

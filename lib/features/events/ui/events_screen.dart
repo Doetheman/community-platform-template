@@ -5,8 +5,6 @@ import '../state/event_provider.dart';
 import '../domain/entities/event.dart';
 import 'widgets/events_list.dart';
 import 'widgets/events_calendar.dart';
-import 'package:white_label_community_app/features/auth/state/auth_provider.dart'
-    as auth;
 import 'package:white_label_community_app/features/auth/state/user_role_provider.dart';
 import '../state/event_controller.dart';
 import 'widgets/event_category_filter.dart';
@@ -25,7 +23,6 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
   @override
   Widget build(BuildContext context) {
     final eventState = ref.watch(eventControllerProvider);
-    final currentUser = ref.watch(auth.firebaseAuthProvider).currentUser;
     final eventController = ref.read(eventControllerProvider.notifier);
     final userRole = ref.watch(userRoleProvider);
     final isAdmin = userRole.value == 'admin';

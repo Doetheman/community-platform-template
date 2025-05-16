@@ -45,5 +45,34 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	
+	<!-- Deep linking configuration -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.example.whiteLabelCommunityApp</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>whiteLabelCommunityApp</string>
+			</array>
+		</dict>
+	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>whatsapp</string>
+		<string>fb</string>
+		<string>twitter</string>
+		<string>mailto</string>
+		<string>sms</string>
+	</array>
+	
+	<!-- Firebase Dynamic Links configuration -->
+	<key>FirebaseDynamicLinksCustomDomains</key>
+	<array>
+		<string>https://whitecommunity.page.link</string>
+	</array>
 </dict>
 </plist>

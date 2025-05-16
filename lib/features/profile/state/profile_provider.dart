@@ -59,3 +59,8 @@ final userProfileByUidProvider = FutureProvider.family<UserProfile?, String>((
 ) async {
   return ref.read(getProfileProvider)(uid);
 });
+
+final allUserProfilesProvider = FutureProvider<List<UserProfile>>((ref) async {
+  final repo = ref.watch(profileRepositoryProvider);
+  return repo.getAllProfiles();
+});

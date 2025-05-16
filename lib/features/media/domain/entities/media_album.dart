@@ -1,6 +1,3 @@
-import 'package:white_label_community_app/features/media/domain/entities/media_item.dart'
-    hide MediaAlbum;
-
 class MediaAlbum {
   final String id;
   final String authorId;

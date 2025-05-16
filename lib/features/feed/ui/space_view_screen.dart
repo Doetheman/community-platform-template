@@ -14,7 +14,9 @@ class SpaceViewScreen extends ConsumerWidget {
     final groupTitle = space['name'] ?? 'Group Chat';
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ChatScreen(title: groupTitle)),
+      MaterialPageRoute(
+        builder: (context) => ChatScreen(title: groupTitle, chatId: ''),
+      ),
     );
   }
 
@@ -22,7 +24,9 @@ class SpaceViewScreen extends ConsumerWidget {
     final adminTitle = 'Admin of ${space['name'] ?? 'Space'}';
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ChatScreen(title: adminTitle)),
+      MaterialPageRoute(
+        builder: (context) => ChatScreen(title: adminTitle, chatId: ''),
+      ),
     );
   }
 
